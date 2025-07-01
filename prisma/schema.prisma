@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model Podcast {
+  id                      String      @id @unique
+  wrapperType             String
+  kind                    String
+  artistName              String
+  collectionName          String
+  trackName               String
+  collectionCensoredName  String
+  collectionViewUrl       String
+  feedUrl                 String
+  trackViewUrl            String
+  artworkUrl30            String
+  artworkUrl60            String
+  artworkUrl100           String
+  releaseDate             DateTime
+  country                 String
+  primaryGenreName        String
+  artworkUrl600           String
+  searchedKeywords       String[]
+  episodes               Episode[]
+}
+
+model Episode {
+  id                      String      @id @unique
+  previewUrl              String
+  episodeUrl              String
+  episodeGuid             String
+  genres                  Json
+  feedUrl                 String
+  trackName               String
+  shortDescription        String
+  releaseDate             DateTime
+  closedCaptioning        String
+  collectionId            String?     
+  collectionName          String?
+  kind                    String
+  wrapperType             String
+  description             String
+  country                 String
+  artistViewUrl           String?
+  collectionViewUrl       String?
+  trackViewUrl            String
+  artworkUrl60            String
+  artworkUrl600           String
+  artworkUrl160           String
+  episodeFileExtension    String
+  episodeContentType      String
+  searchedKeywords       String[]
+  // Made the relationship optional and removed onDelete cascade to allow episodes without podcasts
+  podcast                Podcast?    @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+}
