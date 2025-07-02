@@ -21,12 +21,11 @@ const Search = () => {
   }, [query]);
 
   useEffect(() => {
-    if (debouncedQuery) {
+    if (debouncedQuery && debouncedQuery.length > 3) {
       setLoading(true);
       // Simulate loading before navigation
       setTimeout(() => {
         setLoading(false);
-
         setQuery("");
         router.push(`/search/${debouncedQuery}`);
       }, 1000); // Adjust the delay as needed
