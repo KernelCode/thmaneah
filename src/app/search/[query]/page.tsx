@@ -4,7 +4,6 @@ import Podcasts from "@/components/Podcasts";
 import Episodes from "@/components/Episodes";
 import { Podcast } from "@/services/podcasts";
 import { Episode } from "@/services/episodes";
-import AudioPlayer from "@/components/AudioPlayer";
 
 type Iprops = {
   params: Promise<{ query: string }>;
@@ -50,7 +49,6 @@ export default async function Page(props: Iprops) {
           };
         })}
       />
-      <AudioPlayer />
     </>
   );
 }

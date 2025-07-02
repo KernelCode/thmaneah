@@ -1,3 +1,5 @@
+"use server";
+
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -53,7 +55,23 @@ export async function getCachedEpisodes(query: string) {
     throw error;
   }
 }
-
+export async function getCachedEpisode(id: string) {
+  try {
+    if (!id || id.trim() === "") {
+      return null;
+    }
+    const episode = await prisma.episode.findUnique({
+      where: {
+        id: String(id),
+      },
+    });
+    console.log("Cached episode:", String(id));
+    return episode;
+  } catch (error) {
+    console.error("Database query error:", error);
+    throw error;
+  }
+}
 export async function storeEpisodes(episodeData: Episode[]) {
   const storedEpisodes = await Promise.all(
     episodeData.map(async (result) => {

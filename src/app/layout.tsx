@@ -10,6 +10,7 @@ import MenuClick from "@/components/MenuClick";
 import "swiper/css";
 import "swiper/css/scrollbar";
 import Search from "@/components/Search";
+import AudioPlayer from "@/components/AudioPlayer";
 
 export const metadata: Metadata = {
   title: "بودكاست ☕ ",
@@ -96,7 +97,9 @@ export default function RootLayout({
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 p-2 sm:p-6 block mt-15">{children}</main>
+            <main className="flex-1 p-2 sm:p-6 block mt-15">
+              {children} <AudioPlayer />
+            </main>
           </div>
         </div>
       </body>

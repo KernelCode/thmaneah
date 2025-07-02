@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from "@/lib/prisma";
 
 export async function getCachedPodcasts(query: string) {
@@ -21,7 +23,23 @@ export async function getCachedPodcasts(query: string) {
     throw error;
   }
 }
-
+export async function getCachedPodcast(id: string) {
+  try {
+    if (!id || id.trim() === "") {
+      return null;
+    }
+    const podcast = await prisma.podcast.findUnique({
+      where: {
+        id: String(id),
+      },
+    });
+    console.log("Cached podcast:", String(id));
+    return podcast;
+  } catch (error) {
+    console.error("Database query error:", error);
+    throw error;
+  }
+}
 export type Podcast = {
   id: string;
   wrapperType: string;
