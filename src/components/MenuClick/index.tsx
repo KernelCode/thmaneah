@@ -46,6 +46,7 @@ const MenuClick = ({ items }: { items?: MenuItem[] }) => {
                   className="px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-200 cursor-pointer"
                 >
                   <Link
+                    prefetch={false}
                     href={item.href}
                     className="block  py-2 text-gray-400 hover:text-white hover:bg-200 transition-colors"
                   >

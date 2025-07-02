@@ -65,12 +65,12 @@ const EpisodeCard = ({
         </div>
       </div>
       <div className="flex-1 min-w-0 overflow-hidden">
-        <Link href={`/episode/${episode.id}`}>
+        <Link href={`/episode/${episode.id}`} prefetch={false}>
           <h3 className="text-white font-medium text-base mb-1 hover:underline line-clamp-2 overflow-hidden">
             {episode.title}
           </h3>
         </Link>
-        <Link href={`/podcast/${episode.id}`}>
+        <Link href={`/podcast/${episode.id}`} prefetch={false}>
           <h4 className="text-pink-400 text-sm font-medium mb-2 hover:underline">{episode.podcast}</h4>
         </Link>
         {!isCompact && (
