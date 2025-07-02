@@ -1,4 +1,4 @@
-import { CirclePlay } from "lucide-react";
+import { CirclePause, CirclePlay } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import MenuClick from "../MenuClick";
@@ -26,7 +26,7 @@ const EpisodeCard = ({
   isScroll?: boolean;
   isCompact?: boolean;
 }) => {
-  const { setCurrentTrack } = useAudioStore();
+  const { setCurrentTrack, currentTrack } = useAudioStore();
 
   return (
     <div
@@ -47,7 +47,21 @@ const EpisodeCard = ({
           className="rounded-lg object-cover w-full h-full transition-transform duration-200 group-hover:scale-105"
         />
         <div className="absolute inset-0 flex items-center justify-center cursor-pointer bg-black/70 bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-          <CirclePlay className="size-12 text-white hover:text-pink-400 transition-colors" />
+          {currentTrack !== episode.audioUrl ? (
+            <CirclePlay
+              onClick={() => {
+                if (episode.audioUrl) setCurrentTrack(episode.audioUrl);
+              }}
+              className="size-12 text-white hover:text-pink-400 transition-colors"
+            />
+          ) : (
+            <CirclePause
+              onClick={() => {
+                setCurrentTrack("");
+              }}
+              className="size-12 text-white hover:text-pink-400 transition-colors"
+            />
+          )}
         </div>
       </div>
       <div className="flex-1 min-w-0 overflow-hidden">
@@ -112,12 +126,6 @@ const EpisodeCard = ({
             },
           ]}
         />
-
-        {!isGrid && (
-          <button className="transition-opacity cursor-pointer">
-            <CirclePlay className="w-8 h-8 text-white hover:text-pink-400 transition-colors" />
-          </button>
-        )}
       </div>
     </div>
   );

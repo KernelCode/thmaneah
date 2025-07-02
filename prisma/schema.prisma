@@ -24,7 +24,7 @@ model Podcast {
   trackName               String
   collectionCensoredName  String
   collectionViewUrl       String
-  feedUrl                 String
+  feedUrl                 String?
   trackViewUrl            String
   artworkUrl30            String
   artworkUrl60            String
@@ -43,7 +43,7 @@ model Episode {
   episodeUrl              String
   episodeGuid             String
   genres                  Json
-  feedUrl                 String
+  feedUrl                 String?
   trackName               String
   shortDescription        String
   releaseDate             DateTime

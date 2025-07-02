@@ -1,5 +1,6 @@
 import Image from "next/image";
 import MenuClick from "../MenuClick";
+import Link from "next/link";
 
 export type Podcast = {
   id: string;
@@ -8,7 +9,7 @@ export type Podcast = {
   image: string;
 };
 const PodcastCard = ({ podcast }: { podcast: Podcast }) => (
-  <div className="group cursor-pointer bg-100 hover:bg-200 p-2">
+  <Link href={`/podcast/${podcast.id}`} prefetch={false} className="group cursor-pointer bg-100 hover:bg-200 p-2">
     <div className="bg-teal-600 rounded-xl  mb-3 aspect-square flex items-center justify-center relative overflow-hidden  transition-transform duration-200">
       <Image
         src={podcast.image}
@@ -25,7 +26,7 @@ const PodcastCard = ({ podcast }: { podcast: Podcast }) => (
       </div>
       <MenuClick />
     </div>
-  </div>
+  </Link>
 );
 
 export default PodcastCard;

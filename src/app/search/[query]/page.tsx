@@ -17,10 +17,11 @@ export default async function Page(props: Iprops) {
   console.log("Search query:", `${process.env.NEXT_PUBLIC_API_URL}/search?query=${query}`);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/search?query=${query}`);
   const { podcasts, episodes } = await response.json();
-
+  const queryDecoded = decodeURIComponent(query);
   return (
     <>
       <Podcasts
+        searchTerm={queryDecoded}
         podcasts={podcasts.map((podcast: Podcast) => {
           return {
             id: podcast.id,
@@ -31,6 +32,7 @@ export default async function Page(props: Iprops) {
         })}
       />
       <Episodes
+        searchTerm={queryDecoded}
         episodes={episodes.map((episode: Episode) => {
           return {
             id: episode.id,

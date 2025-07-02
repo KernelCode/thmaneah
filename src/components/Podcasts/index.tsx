@@ -10,7 +10,7 @@ import MenuClick from "../MenuClick";
 import type { Podcast } from "../PodcastCard";
 import PodcastCard from "../PodcastCard";
 
-const Podcasts = ({ podcasts }: { podcasts: Podcast[] }) => {
+const Podcasts = ({ podcasts, searchTerm }: { podcasts: Podcast[]; searchTerm: string }) => {
   const [showType, setShowType] = useState("scroll");
   const swiperRef = useRef<SwiperRef | null>(null);
 
@@ -30,7 +30,7 @@ const Podcasts = ({ podcasts }: { podcasts: Podcast[] }) => {
     <section className="mb-12 block">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-white">
-          أفضل البودكاست لـ <span>فنجان</span>
+          أفضل البودكاست لـ <span>{searchTerm}</span>
         </h2>
         <div className="flex items-center gap-2">
           {showType === "scroll" && (

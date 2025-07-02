@@ -8,7 +8,7 @@ import MenuClick from "../MenuClick";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Scrollbar } from "swiper/modules";
 
-const Episodes = ({ episodes }: { episodes: Episode[] }) => {
+const Episodes = ({ episodes, searchTerm }: { episodes: Episode[]; searchTerm: string }) => {
   const [showType, setShowType] = useState("grid");
   const swiperRef = useRef<SwiperRef | null>(null);
 
@@ -27,7 +27,7 @@ const Episodes = ({ episodes }: { episodes: Episode[] }) => {
     <section>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-white">
-          افضل الحلقات لـ <span>فنجان</span>
+          افضل الحلقات لـ <span>{searchTerm}</span>
         </h2>
         <div className="flex gap-2">
           {showType === "scroll" && (
