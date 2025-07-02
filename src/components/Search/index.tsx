@@ -46,6 +46,15 @@ const Search = () => {
           className="w-full bg-100 border border-gray-700 rounded-full px-10 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && query.length > 3) {
+              setLoading(true);
+
+              setLoading(false);
+              setQuery("");
+              router.push(`/search/${query}`);
+            }
+          }}
         />
       </div>
     </div>
