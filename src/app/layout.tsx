@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { Home, Compass, Clock, Headphones } from "lucide-react";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Image from "next/image";
+import MenuClick from "@/components/MenuClick";
+
+// swiper styles
+import "swiper/css";
+import "swiper/css/scrollbar";
+import Search from "@/components/Search";
 
 export const metadata: Metadata = {
   title: "بودكاست ☕ ",
@@ -24,7 +23,83 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" className="dark" dir="rtl">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <body className="antialiased">
+        <div className="bg-100 min-h-screen text-white" dir="rtl">
+          {/* Header */}
+          <header className="flex items-center justify-between p-4 border-b border-200 fixed bg-100 z-50 w-full">
+            <div className="flex items-center gap-2 lg:gap-4">
+              <Image
+                //Thmanyah_Logo.svg
+                src="/Thmanyah_Logo.svg"
+                alt="Thmanyah Logo"
+                width={40}
+                height={40}
+                className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+              />
+            </div>
+
+            <Search />
+
+            <div className="flex items-center gap-2">
+              <button className="hidden sm:block px-4 py-2 bg-white hover:bg-gray-300 text-black rounded-full text-sm font-medium transition-colors cursor-pointer">
+                دخول
+              </button>
+              <button className="hidden sm:block px-4 py-2 bg-white hover:bg-gray-300 text-black rounded-full text-sm font-medium transition-colors cursor-pointer">
+                تسجيل
+              </button>
+              <MenuClick
+                items={[
+                  {
+                    label: "إعدادات",
+                  },
+                  {
+                    label: "تسجيل الخروج",
+                  },
+                ]}
+              />
+            </div>
+          </header>
+
+          <div className="flex ">
+            {/* Sidebar */}
+            <aside className=" bg-200 border-r border-200 p-2 sm:p-4 sm:w-60 hidden sm:block sticky min-h-screen ">
+              <div className="fixed mt-18 z-10">
+                <nav className="space-y-2 max-w-[19rem]">
+                  <button className="flex items-center gap-3 w-full p-3 rounded-lg text-right transition-colors  bg-100 text-white">
+                    <Home className="size-5 min-w-5 " />
+                    <span className="hidden sm:block">الواجهة</span>
+                  </button>
+                  <button className="flex items-center gap-3 w-full p-3 rounded-lg text-right transition-colors text-gray-400 hover:text-white hover:bg-100 cursor-pointer ">
+                    <Compass className="min-w-5 size-5" />
+                    <span className="hidden sm:block">استكشف</span>
+                  </button>
+                </nav>
+
+                <div className="mt-0 lg:mt-8 ">
+                  <h3 className="text-gray-400 text-sm font-medium mb-4 px-3 hidden sm:block">خاص بك</h3>
+                  <nav className="space-y-2 max-w-[19rem]">
+                    <button className="flex items-center gap-3 w-full p-3 rounded-lg text-right text-gray-400 hover:text-white hover:bg-100 transition-colors cursor-pointer">
+                      <div className="size-5 min-w-5 bg-gray-600 rounded"></div>
+                      <span className="hidden sm:block">قائمتك</span>
+                    </button>
+                    <button className="flex items-center gap-3 w-full p-3 rounded-lg text-right text-gray-400 hover:text-white hover:bg-200 transition-colors cursor-pointer">
+                      <Headphones className="size-5 min-w-5 " />
+                      <span className="hidden sm:block">البودكاسات المفضلة</span>
+                    </button>
+                    <button className="flex items-center gap-3 w-full p-3 rounded-lg text-right text-gray-400 hover:text-white hover:bg-200 transition-colors cursor-pointer">
+                      <Clock className="size-5 min-w-5 " />
+                      <span className="hidden sm:block">اخر ماتم تشغيلة</span>
+                    </button>
+                  </nav>
+                </div>
+              </div>
+            </aside>
+
+            {/* Main Content */}
+            <main className="flex-1 p-2 sm:p-6 block mt-15">{children}</main>
+          </div>
+        </div>
+      </body>
     </html>
   );
 }

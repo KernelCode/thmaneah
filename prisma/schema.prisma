@@ -12,6 +12,13 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model SearchKeyword {
+  keyword     String      @id @unique
+  podcasts    Podcast[]   @relation("PodcastKeywords")
+  episodes    Episode[]   @relation("EpisodeKeywords")
+}
+
 model Podcast {
   id                      String      @id @unique
   wrapperType             String
@@ -30,8 +37,8 @@ model Podcast {
   country                 String
   primaryGenreName        String
   artworkUrl600           String
-  searchedKeywords       String[]
-  episodes               Episode[]
+  episodes                Episode[]
+  searchKeywords          SearchKeyword[] @relation("PodcastKeywords")
 }
 
 model Episode {
@@ -59,7 +66,6 @@ model Episode {
   artworkUrl160           String
   episodeFileExtension    String
   episodeContentType      String
-  searchedKeywords       String[]
-  // Made the relationship optional and removed onDelete cascade to allow episodes without podcasts
-  podcast                Podcast?    @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+  podcast                 Podcast?    @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+  searchKeywords          SearchKeyword[] @relation("EpisodeKeywords")
 }
