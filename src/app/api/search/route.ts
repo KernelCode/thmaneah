@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 
 import { getCachedPodcasts, getPodcastFromExternalAPIs, storePodcasts } from "@/services/podcasts";
 import { getCachedEpisodes, getPodcastEpisodesFromExternalAPIs, storeEpisodes } from "@/services/episodes";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -22,6 +23,7 @@ export async function GET(request: NextRequest) {
 
   // If cached results exist, return them
   if (cachedPodcasts.length > 0 && cachedEpisodes.length > 0) {
+    console.log("Returning cached results for query:", query);
     return new Response(
       JSON.stringify({
         podcasts: cachedPodcasts,
@@ -42,10 +44,32 @@ export async function GET(request: NextRequest) {
   (async () => {
     try {
       // First, insert podcasts
-      await storePodcasts(storedPodcastsData, query);
+      await storePodcasts(storedPodcastsData);
 
       // Then, insert episodes
-      await storeEpisodes(storedEpisodesData, query);
+      await storeEpisodes(storedEpisodesData);
+
+      // Store search keyword and its relations
+      await prisma.searchKeywords.upsert({
+        where: { keyword: query },
+        create: {
+          keyword: query,
+          podcasts: {
+            connect: storedPodcastsData.map((podcast) => ({ id: podcast.id })),
+          },
+          episodes: {
+            connect: storedEpisodesData.map((episode) => ({ id: episode.id })),
+          },
+        },
+        update: {
+          podcasts: {
+            connect: storedPodcastsData.map((podcast) => ({ id: podcast.id })),
+          },
+          episodes: {
+            connect: storedEpisodesData.map((episode) => ({ id: episode.id })),
+          },
+        },
+      });
     } catch (error) {
       console.error("Error storing data in database:", error);
     }

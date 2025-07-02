@@ -18,7 +18,7 @@ const PodcastCard = ({ podcast }: { podcast: Podcast }) => (
         className="rounded-lg object-cover w-full h-full transition-transform duration-200 group-hover:scale-105"
       />
     </div>
-    <div className="flex justify-between">
+    <div className="flex justify-between overflow-hidden">
       <div>
         <h3 className="text-white font-medium text-sm mb-1 line-clamp-2 hover:underline">{podcast.title}</h3>
         <p className="text-gray-400 text-xs">{podcast.host}</p>

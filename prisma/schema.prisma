@@ -13,11 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SearchKeyword {
-  keyword     String      @id @unique
-  podcasts    Podcast[]   @relation("PodcastKeywords")
-  episodes    Episode[]   @relation("EpisodeKeywords")
-}
+
 
 model Podcast {
   id                      String      @id @unique
@@ -38,7 +34,7 @@ model Podcast {
   primaryGenreName        String
   artworkUrl600           String
   episodes                Episode[]
-  searchKeywords          SearchKeyword[] @relation("PodcastKeywords")
+  SearchKeywords          SearchKeywords[]  @relation
 }
 
 model Episode {
@@ -66,6 +62,14 @@ model Episode {
   artworkUrl160           String
   episodeFileExtension    String
   episodeContentType      String
+  trackTimeMillis         Int
   podcast                 Podcast?    @relation(fields: [collectionId], references: [id], onDelete: SetNull)
-  searchKeywords          SearchKeyword[] @relation("EpisodeKeywords")
+  SearchKeywords          SearchKeywords[]  @relation
 }
+model SearchKeywords {
+  id          String    @id @default(uuid())
+  keyword     String    @unique
+  podcasts    Podcast[]
+  episodes    Episode[]
+}
+

@@ -6,7 +6,7 @@ export async function getCachedPodcasts(query: string) {
       return [];
     }
 
-    const searchKeyword = await prisma.searchKeyword.findUnique({
+    const searchKeyword = await prisma.searchKeywords.findUnique({
       where: {
         keyword: query.trim(),
       },
@@ -45,9 +45,9 @@ export type Podcast = {
   searchedKeywords: string[];
 };
 
-export async function storePodcasts(podcastData: Podcast[], query: string) {
+export async function storePodcasts(podcastData: Podcast[]) {
   const storedPodcasts = podcastData.map((result) => ({
-    id: String(result.collectionId),
+    id: String(result.id || result.collectionId),
     wrapperType: result.wrapperType,
     kind: result.kind,
     artistName: result.artistName,
@@ -64,7 +64,6 @@ export async function storePodcasts(podcastData: Podcast[], query: string) {
     country: result.country,
     primaryGenreName: result.primaryGenreName,
     artworkUrl600: result.artworkUrl600,
-    searchedKeywords: [query],
   }));
 
   await prisma.podcast.createMany({

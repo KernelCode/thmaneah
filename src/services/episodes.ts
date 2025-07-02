@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export type Episode = {
-  trackId: number;
+  trackId?: number;
   id: string;
   previewUrl: string;
   episodeUrl: string;
@@ -14,7 +14,7 @@ export type Episode = {
   shortDescription: string;
   releaseDate: Date;
   closedCaptioning: string;
-  collectionId: number;
+  collectionId: string;
   collectionName: string;
   kind: string;
   wrapperType: string;
@@ -29,6 +29,7 @@ export type Episode = {
   episodeFileExtension: string;
   episodeContentType: string;
   searchedKeywords: string[];
+  trackTimeMillis?: number; // Optional, if not present in the API response
 };
 
 export async function getCachedEpisodes(query: string) {
@@ -37,7 +38,7 @@ export async function getCachedEpisodes(query: string) {
       return [];
     }
 
-    const searchKeyword = await prisma.searchKeyword.findUnique({
+    const searchKeyword = await prisma.searchKeywords.findUnique({
       where: {
         keyword: query.trim(),
       },
@@ -53,7 +54,7 @@ export async function getCachedEpisodes(query: string) {
   }
 }
 
-export async function storeEpisodes(episodeData: Episode[], query: string) {
+export async function storeEpisodes(episodeData: Episode[]) {
   const storedEpisodes = await Promise.all(
     episodeData.map(async (result) => {
       const existingCollection = await prisma.podcast.findUnique({
@@ -63,7 +64,7 @@ export async function storeEpisodes(episodeData: Episode[], query: string) {
       const haveCollection = existingCollection !== null;
 
       return {
-        id: String(result.trackId),
+        id: String(result.id || result.trackId),
         previewUrl: result.previewUrl,
         episodeUrl: result.episodeUrl,
         episodeGuid: result.episodeGuid,
@@ -87,7 +88,7 @@ export async function storeEpisodes(episodeData: Episode[], query: string) {
         artworkUrl160: result.artworkUrl160,
         episodeFileExtension: result.episodeFileExtension,
         episodeContentType: result.episodeContentType,
-        searchedKeywords: [query],
+        trackTimeMillis: result.trackTimeMillis || 0,
       };
     })
   );
@@ -104,7 +105,7 @@ export async function getPodcastEpisodesFromExternalAPIs(query: string) {
   const podcastEpisodeResponse = await fetch(
     `https://itunes.apple.com/search?media=podcast&term=${query}&entity=podcastEpisode`
   );
-  const podcastEpisodeData = await podcastEpisodeResponse.json();
+  const podcastEpisodeData: { results: Episode[] } = await podcastEpisodeResponse.json();
 
   const storedEpisodesData = podcastEpisodeData.results.map((result: Episode) => ({
     id: String(result.trackId),
@@ -132,6 +133,7 @@ export async function getPodcastEpisodesFromExternalAPIs(query: string) {
     episodeFileExtension: result.episodeFileExtension,
     episodeContentType: result.episodeContentType,
     searchedKeywords: [query],
+    trackTimeMillis: result.trackTimeMillis || 0, // Optional, if not present in the API response
   }));
   return storedEpisodesData;
 }

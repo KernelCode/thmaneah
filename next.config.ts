@@ -2,7 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["cdn-images.podbay.fm"],
+    // for now ..
+    // we'll change this later for protection
+    remotePatterns: [
+      {
+        protocol: "https", // or 'http' if needed, but 'https' is recommended
+        hostname: "**", // This wildcard allows all hostnames
+      },
+    ],
   },
 };
 
